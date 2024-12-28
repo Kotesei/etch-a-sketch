@@ -5,7 +5,7 @@ const btn = document.querySelector(".userInput")
 
 // Gets the grid-size
 function gridSize(size) {
-    if (size >= 51) {
+    if (size > 50) {
         alert("This is too much for the browser to handle! Max is 50.")
         return
     }
