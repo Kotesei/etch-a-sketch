@@ -1,6 +1,13 @@
 'use strict'
 const container = document.querySelector(".container")
 const btn = document.querySelector(".userInput")
+const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
+
+
+// Random color from rainbow
+function RandColor() {
+    return rainbow[Math.floor(Math.random() * rainbow.length)]
+}
 
 
 // Gets the grid-size
@@ -23,7 +30,7 @@ for (let square = 0; square < gridSize; square++) {
         el.style.height = squareSize + "px"
 
         el.addEventListener("mouseenter", function() {
-            el.style.backgroundColor = "blue"
+            el.style.backgroundColor = "black"
         })
     })
 }
