@@ -4,8 +4,11 @@ const btn = document.querySelector(".userInput")
 const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
 let enableRainbow;
 let enableDarken;
+let allowDrawing = false;
 
+// Enable rainbow
 enableRainbow = true;
+enableDarken = true;
 // Random color from rainbow
 function RandColor() {
     return rainbow[Math.floor(Math.random() * rainbow.length)]
@@ -48,9 +51,13 @@ for (let square = 0; square < gridSize; square++) {
         el.style.height = squareSize + "px"
 
         el.addEventListener("mouseenter", function(el) {
+            if (allowDrawing === false) return
+            // Checks if darken is enabled
+            if (enableDarken === true) darken(el.target)
+
+            // Checks if rainbow is enabled
             if (enableRainbow === true) el.target.style.backgroundColor = `${RandColor()}`
-            else el.target.style.backgroundColor = "black"
-            darken(el.target);
+            else el.target.style.backgroundColor = "red"
         })
     })
 }
@@ -60,6 +67,7 @@ btn.addEventListener("click", function() {
    let values = "0123456789"
    let allow;
 
+   if (input === null) return
    input.split("").forEach((i) => {
     if(values.includes(i)) {
         allow = true;
@@ -69,6 +77,20 @@ btn.addEventListener("click", function() {
 })
    if (allow) {
        container.innerHTML = ""
+       
        gridSize(input)
    } else window.alert("Not a number!!!")
+})
+
+container.addEventListener("mousedown", function() {
+    console.log('ye');
+    allowDrawing = true;
+})
+container.addEventListener("mouseup", function() {
+    console.log('no');
+    allowDrawing = false;
+})
+container.addEventListener("mouseleave", function() {
+    allowDrawing = false;
+    console.log('no');
 })
