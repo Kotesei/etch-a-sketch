@@ -83,14 +83,11 @@ btn.addEventListener("click", function() {
 })
 
 container.addEventListener("mousedown", function() {
-    console.log('ye');
     allowDrawing = true;
 })
 container.addEventListener("mouseup", function() {
-    console.log('no');
     allowDrawing = false;
 })
 container.addEventListener("mouseleave", function() {
     allowDrawing = false;
-    console.log('no');
 })
