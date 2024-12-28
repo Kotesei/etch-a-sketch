@@ -2,11 +2,29 @@
 const container = document.querySelector(".container")
 const btn = document.querySelector(".userInput")
 const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
+let enableRainbow;
+let enableDarken;
 
-
+enableRainbow = true;
 // Random color from rainbow
 function RandColor() {
     return rainbow[Math.floor(Math.random() * rainbow.length)]
+}
+
+function darken(target) {
+    
+    const shade = `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(transparent, transparent)`
+    
+    if (target.style.backgroundImage === "") {
+        return target.style.backgroundImage = shade
+    } else {
+        let increase = Number(target.style.backgroundImage.split(",")[3].split(")")[0])
+        if (isNaN(increase)) return
+        increase += 0.1
+        console.log(increase);
+        return target.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, ${increase += 0.1}), rgba(0, 0, 0, ${increase += 0.1})), linear-gradient(transparent, transparent)`
+    }
+  
 }
 
 
@@ -29,8 +47,10 @@ for (let square = 0; square < gridSize; square++) {
         el.style.width = squareSize + "px"
         el.style.height = squareSize + "px"
 
-        el.addEventListener("mouseenter", function() {
-            el.style.backgroundColor = "black"
+        el.addEventListener("mouseenter", function(el) {
+            if (enableRainbow === true) el.target.style.backgroundColor = `${RandColor()}`
+            else el.target.style.backgroundColor = "black"
+            darken(el.target);
         })
     })
 }
