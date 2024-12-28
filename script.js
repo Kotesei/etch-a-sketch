@@ -4,11 +4,15 @@ const btn = document.querySelector(".userInput")
 const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
 let enableRainbow;
 let enableDarken;
+let enableRed;
+let enableBlue;
+let enableCustomColor;
+let hexColorCode;
 let allowDrawing = false;
+let revealBtns = false;
 
 // Enable rainbow
-enableRainbow = true;
-enableDarken = true;
+
 // Random color from rainbow
 function RandColor() {
     return rainbow[Math.floor(Math.random() * rainbow.length)]
@@ -57,17 +61,78 @@ for (let square = 0; square < gridSize; square++) {
 
             // Checks if rainbow is enabled
             if (enableRainbow === true) el.target.style.backgroundColor = `${RandColor()}`
-            else el.target.style.backgroundColor = "red"
+            if (enableRed === true) el.target.style.backgroundColor = "red"
+            if (enableBlue === true) el.target.style.backgroundColor = "blue"
+            if (enableCustomColor === true) el.target.style.backgroundColor = `${hexColorCode}`
+
         })
     })
 }
+
+
 
 btn.addEventListener("click", function() {
    const input = window.prompt("Please type in how big you would like the grid!", "16")
    let values = "0123456789"
    let allow;
 
+   console.log(input);
    if (input === null) return
+   if (revealBtns === false) {
+    revealBtns = true;
+    btn.insertAdjacentHTML("afterend", `<div class="btnsContainer"><button class="redBtn btnSel">Red</button><button class="blueBtn btnSel">Blue</button><button class="customBtn btnSel">Custom Color</button><button class="rainbowBtn btnSel">Rainbow</button><button class="darkenBtn btnSel">Darken</button></div>`)
+    const redBtn = document.querySelector(".redBtn")
+    const blueBtn = document.querySelector(".blueBtn")
+    const customBtn = document.querySelector(".customBtn")
+    const rainbowBtn = document.querySelector(".rainbowBtn")
+    const darkenBtn = document.querySelector(".darkenBtn")
+
+    redBtn.addEventListener("click", function() {
+        enableBlue = false
+        enableRainbow = false;
+        enableCustomColor = false
+        if (enableRed === true) return enableRed = false
+        enableRed = true
+    })
+    blueBtn.addEventListener("click", function() {
+        enableRed = false
+        enableRainbow = false;
+        enableCustomColor = false
+        if (enableBlue === true) return enableBlue = false
+        enableBlue = true
+        
+    })
+    customBtn.addEventListener("click", function() {
+        const regex = /#[\da-f]{6}/i;
+        console.log(regex);
+        const colorInput = window.prompt("Type in a hex color code!", "#ffffff")
+        if (regex.test(colorInput)) {
+           hexColorCode = colorInput
+        }
+        enableRed = false
+        enableBlue = false
+        enableRainbow = false
+        if (enableCustomColor === true) return enableCustomColor = false
+        enableCustomColor = true
+    })
+    rainbowBtn.addEventListener("click", function() {
+        enableRed = false
+        enableBlue = false
+        enableCustomColor = false
+        if (enableRainbow === true) return enableRainbow = false
+        enableRainbow = true;
+        
+    })
+    darkenBtn.addEventListener("click", function() {
+        enableRed = false
+        enableBlue = false
+        enableRainbow = false
+        enableCustomColor = false
+        if (enableDarken === true) return enableDarken = false
+        enableDarken = true;
+    })
+   }
+   
    input.split("").forEach((i) => {
     if(values.includes(i)) {
         allow = true;
@@ -82,12 +147,23 @@ btn.addEventListener("click", function() {
    } else window.alert("Not a number!!!")
 })
 
-container.addEventListener("mousedown", function() {
+container.addEventListener("mousedown", function(el) {
+    if (el.target.classList.value !== "square") return
     allowDrawing = true;
+            // Checks if darken is enabled
+            if (enableDarken === true) darken(el.target)
+
+            // Checks if rainbow is enabled
+            if (enableRainbow === true) el.target.style.backgroundColor = `${RandColor()}`
+            
+            if (enableRed === true) el.target.style.backgroundColor = "red"
+            if (enableBlue === true) el.target.style.backgroundColor = "blue"
+            if (enableCustomColor === true) el.target.style.backgroundColor = `${hexColorCode}`
+    console.log('test');
 })
-container.addEventListener("mouseup", function() {
+document.querySelector("body").addEventListener("mouseup", function() {
     allowDrawing = false;
 })
-container.addEventListener("mouseleave", function() {
+document.querySelector("body").addEventListener("mouseleave", function() {
     allowDrawing = false;
 })

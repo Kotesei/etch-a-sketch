@@ -32,8 +32,15 @@ height: 800px;
 }
 
 .square {
-    outline: 1px solid black;
-    -webkit-user-drag: none;
+    border: 1px solid black;
     user-select: none;
 }
 
+.btnsContainer {
+    display: flex;
+    gap: 2rem;
+}
+
+.btnSel {
+    padding: .4rem .5rem;
+}
