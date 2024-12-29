@@ -1,6 +1,7 @@
 'use strict'
 const container = document.querySelector(".container")
 const btn = document.querySelector(".userInput")
+let btnsContainer;
 const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
 let enableRainbow;
 let enableDarken;
@@ -8,7 +9,7 @@ let enableRed;
 let enableBlue;
 let enableEraser;
 let enableCustomColor;
-let hexColorCode;
+let hexColorCode = "#ffffff"
 let enableDrawing = false;
 let revealBtns = false;
 
@@ -77,91 +78,69 @@ function startDrawing(el) {
         }
 }
 
+function disableAllButSelected(el) {
+ 
+    const selected = el.innerHTML.toLowerCase();
+    el.classList.toggle("btnEnabled")
+    
+
+   switch (selected) {
+       case "red":
+           enableRed = !enableRed; // Toggle red
+           break;
+       case "blue":
+           enableBlue = !enableBlue; // Toggle blue
+           break;
+       case "rainbow":
+           enableRainbow = !enableRainbow; // Toggle rainbow
+           break;
+       case "custom color":
+           if (!enableCustomColor) {
+           const regex = /^#[\da-f]{6}$/i;
+           const colorInput = window.prompt("Type in a hex color code!", hexColorCode)
+           if (regex.test(colorInput)) {
+               hexColorCode = colorInput
+           } else return window.alert("Invalid Hex Code!")
+       }
+           enableCustomColor = !enableCustomColor; // Toggle custom color
+           break;
+       case "darken":
+           enableDarken = !enableDarken; // Toggle darken
+           break;
+       case "eraser":
+           enableEraser = !enableEraser; // Toggle eraser
+           break;
+   }
+
+   if (enableRed || enableBlue || enableRainbow || enableCustomColor || enableDarken || enableEraser) {
+       enableRed = selected === "red" ? enableRed : false;
+       enableBlue = selected === "blue" ? enableBlue : false;
+       enableRainbow = selected === "rainbow" ? enableRainbow : false;
+       enableCustomColor = selected === "custom color" ? enableCustomColor : false;
+       enableDarken = selected === "darken" ? enableDarken : false;
+       enableEraser = selected === "eraser" ? enableEraser : false;
+   }
+
+}
+
 function addEventsToButtons() {
     revealBtns = true;
     btn.insertAdjacentHTML("afterend", `<div class="btnsContainer"><button class="redBtn btnSel">Red</button><button class="blueBtn btnSel">Blue</button><button class="customBtn btnSel">Custom Color</button><button class="rainbowBtn btnSel">Rainbow</button><button class="darkenBtn btnSel">Darken</button><button class="eraseBtn btnSel">Eraser</button></div>`)
+    btnsContainer = document.querySelectorAll(".btnSel")
+
+
+
+   
+
+btnsContainer.forEach((btn) => {
     
-    const redBtn = document.querySelector(".redBtn")
-    const blueBtn = document.querySelector(".blueBtn")
-    const customBtn = document.querySelector(".customBtn")
-    const rainbowBtn = document.querySelector(".rainbowBtn")
-    const darkenBtn = document.querySelector(".darkenBtn")
-    const eraseBtn = document.querySelector(".eraseBtn")
-
-    // function disableAllButSelected() {
-    // enableRed = false
-    // enableBlue = false
-    // enableRainbow = false;
-    // enableCustomColor = false
-    // enableDarken = false
-    // enableEraser = false;
-    // if (el )
-    // }
-
-
-    redBtn.addEventListener("click", function(el) {
-        console.log(el.target.innerHTML);
-        enableBlue = false
-        enableRainbow = false;
-        enableCustomColor = false
-        enableDarken = false
-        enableEraser = false;
-        if (enableRed === true) return enableRed = false
-        enableRed = true
+    btn.addEventListener("click", function(el){
+        btnsContainer.forEach((btn) => {
+            btn.classList.remove("btnEnabled")
+        })
+        disableAllButSelected(el.target)
     })
-    blueBtn.addEventListener("click", function() {
-        enableRed = false
-        enableRainbow = false;
-        enableCustomColor = false
-        enableDarken = false
-        enableEraser = false;
-        if (enableBlue === true) return enableBlue = false
-        enableBlue = true
-        
-    })
-    customBtn.addEventListener("click", function() {
-        const regex = /^#[\da-f]{6}$/i;
-        console.log(regex);
-        const colorInput = window.prompt("Type in a hex color code!", "#ffffff")
-        if (regex.test(colorInput)) {
-            hexColorCode = colorInput
-        } else return window.alert("Invalid Hex Code!")
-        enableRed = false
-        enableBlue = false
-        enableRainbow = false
-        enableDarken = false
-        enableEraser = false;
-        if (enableCustomColor === true) return enableCustomColor = false
-        enableCustomColor = true
-    })
-    rainbowBtn.addEventListener("click", function() {
-        enableRed = false
-        enableBlue = false
-        enableCustomColor = false
-        enableDarken = false
-        enableEraser = false;
-        if (enableRainbow === true) return enableRainbow = false
-        enableRainbow = true;
-        
-    })
-    darkenBtn.addEventListener("click", function() {
-        enableRed = false
-        enableBlue = false
-        enableRainbow = false
-        enableCustomColor = false
-        enableEraser = false;
-        if (enableDarken === true) return enableDarken = false
-        enableDarken = true;
-    })
-    eraseBtn.addEventListener("click", function() {
-        enableRed = false
-        enableBlue = false
-        enableRainbow = false
-        enableCustomColor = false
-        enableDarken = false
-        if (enableEraser === true) return enableEraser = false
-        enableEraser = true;
-    })
+})
 
 }
 
