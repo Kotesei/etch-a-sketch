@@ -6,9 +6,10 @@ let enableRainbow;
 let enableDarken;
 let enableRed;
 let enableBlue;
+let enableEraser;
 let enableCustomColor;
 let hexColorCode;
-let allowDrawing = false;
+let enableDrawing = false;
 let revealBtns = false;
 
 // Enable rainbow
@@ -28,7 +29,6 @@ function darken(target) {
         let increase = Number(target.style.backgroundImage.split(",")[3].split(")")[0])
         if (isNaN(increase)) return
         increase += 0.1
-        console.log(increase);
         return target.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, ${increase += 0.1}), rgba(0, 0, 0, ${increase += 0.1})), linear-gradient(transparent, transparent)`
     }
   
@@ -55,20 +55,115 @@ for (let square = 0; square < gridSize; square++) {
         el.style.height = squareSize + "px"
 
         el.addEventListener("mouseenter", function(el) {
-            if (allowDrawing === false) return
-            // Checks if darken is enabled
-            if (enableDarken === true) darken(el.target)
-
-            // Checks if rainbow is enabled
-            if (enableRainbow === true) el.target.style.backgroundColor = `${RandColor()}`
-            if (enableRed === true) el.target.style.backgroundColor = "red"
-            if (enableBlue === true) el.target.style.backgroundColor = "blue"
-            if (enableCustomColor === true) el.target.style.backgroundColor = `${hexColorCode}`
-
+            if (enableDrawing === false) return
+            startDrawing(el);
         })
     })
 }
 
+function startDrawing(el) {
+    // Checks if darken is enabled
+    if (enableDarken) darken(el.target)
+
+        // Checks if rainbow is enabled
+        if (enableRainbow) el.target.style.backgroundColor = `${RandColor()}`
+        
+        if (enableRed) el.target.style.backgroundColor = "red"
+        if (enableBlue) el.target.style.backgroundColor = "blue"
+        if (enableCustomColor) el.target.style.backgroundColor = `${hexColorCode}`
+        if (enableEraser) {
+            el.target.style.backgroundColor = "white"
+            el.target.style.backgroundImage = ""
+        }
+}
+
+function addEventsToButtons() {
+    revealBtns = true;
+    btn.insertAdjacentHTML("afterend", `<div class="btnsContainer"><button class="redBtn btnSel">Red</button><button class="blueBtn btnSel">Blue</button><button class="customBtn btnSel">Custom Color</button><button class="rainbowBtn btnSel">Rainbow</button><button class="darkenBtn btnSel">Darken</button><button class="eraseBtn btnSel">Eraser</button></div>`)
+    
+    const redBtn = document.querySelector(".redBtn")
+    const blueBtn = document.querySelector(".blueBtn")
+    const customBtn = document.querySelector(".customBtn")
+    const rainbowBtn = document.querySelector(".rainbowBtn")
+    const darkenBtn = document.querySelector(".darkenBtn")
+    const eraseBtn = document.querySelector(".eraseBtn")
+
+    // function disableAllButSelected() {
+    // enableRed = false
+    // enableBlue = false
+    // enableRainbow = false;
+    // enableCustomColor = false
+    // enableDarken = false
+    // enableEraser = false;
+    // if (el )
+    // }
+
+
+    redBtn.addEventListener("click", function(el) {
+        console.log(el.target.innerHTML);
+        enableBlue = false
+        enableRainbow = false;
+        enableCustomColor = false
+        enableDarken = false
+        enableEraser = false;
+        if (enableRed === true) return enableRed = false
+        enableRed = true
+    })
+    blueBtn.addEventListener("click", function() {
+        enableRed = false
+        enableRainbow = false;
+        enableCustomColor = false
+        enableDarken = false
+        enableEraser = false;
+        if (enableBlue === true) return enableBlue = false
+        enableBlue = true
+        
+    })
+    customBtn.addEventListener("click", function() {
+        const regex = /^#[\da-f]{6}$/i;
+        console.log(regex);
+        const colorInput = window.prompt("Type in a hex color code!", "#ffffff")
+        if (regex.test(colorInput)) {
+            hexColorCode = colorInput
+        } else return window.alert("Invalid Hex Code!")
+        enableRed = false
+        enableBlue = false
+        enableRainbow = false
+        enableDarken = false
+        enableEraser = false;
+        if (enableCustomColor === true) return enableCustomColor = false
+        enableCustomColor = true
+    })
+    rainbowBtn.addEventListener("click", function() {
+        enableRed = false
+        enableBlue = false
+        enableCustomColor = false
+        enableDarken = false
+        enableEraser = false;
+        if (enableRainbow === true) return enableRainbow = false
+        enableRainbow = true;
+        
+    })
+    darkenBtn.addEventListener("click", function() {
+        enableRed = false
+        enableBlue = false
+        enableRainbow = false
+        enableCustomColor = false
+        enableEraser = false;
+        if (enableDarken === true) return enableDarken = false
+        enableDarken = true;
+    })
+    eraseBtn.addEventListener("click", function() {
+        enableRed = false
+        enableBlue = false
+        enableRainbow = false
+        enableCustomColor = false
+        enableDarken = false
+        if (enableEraser === true) return enableEraser = false
+        enableEraser = true;
+    })
+
+}
 
 
 btn.addEventListener("click", function() {
@@ -79,58 +174,7 @@ btn.addEventListener("click", function() {
    console.log(input);
    if (input === null) return
    if (revealBtns === false) {
-    revealBtns = true;
-    btn.insertAdjacentHTML("afterend", `<div class="btnsContainer"><button class="redBtn btnSel">Red</button><button class="blueBtn btnSel">Blue</button><button class="customBtn btnSel">Custom Color</button><button class="rainbowBtn btnSel">Rainbow</button><button class="darkenBtn btnSel">Darken</button></div>`)
-    const redBtn = document.querySelector(".redBtn")
-    const blueBtn = document.querySelector(".blueBtn")
-    const customBtn = document.querySelector(".customBtn")
-    const rainbowBtn = document.querySelector(".rainbowBtn")
-    const darkenBtn = document.querySelector(".darkenBtn")
-
-    redBtn.addEventListener("click", function() {
-        enableBlue = false
-        enableRainbow = false;
-        enableCustomColor = false
-        if (enableRed === true) return enableRed = false
-        enableRed = true
-    })
-    blueBtn.addEventListener("click", function() {
-        enableRed = false
-        enableRainbow = false;
-        enableCustomColor = false
-        if (enableBlue === true) return enableBlue = false
-        enableBlue = true
-        
-    })
-    customBtn.addEventListener("click", function() {
-        const regex = /#[\da-f]{6}/i;
-        console.log(regex);
-        const colorInput = window.prompt("Type in a hex color code!", "#ffffff")
-        if (regex.test(colorInput)) {
-           hexColorCode = colorInput
-        }
-        enableRed = false
-        enableBlue = false
-        enableRainbow = false
-        if (enableCustomColor === true) return enableCustomColor = false
-        enableCustomColor = true
-    })
-    rainbowBtn.addEventListener("click", function() {
-        enableRed = false
-        enableBlue = false
-        enableCustomColor = false
-        if (enableRainbow === true) return enableRainbow = false
-        enableRainbow = true;
-        
-    })
-    darkenBtn.addEventListener("click", function() {
-        enableRed = false
-        enableBlue = false
-        enableRainbow = false
-        enableCustomColor = false
-        if (enableDarken === true) return enableDarken = false
-        enableDarken = true;
-    })
+    addEventsToButtons();
    }
    
    input.split("").forEach((i) => {
@@ -149,21 +193,12 @@ btn.addEventListener("click", function() {
 
 container.addEventListener("mousedown", function(el) {
     if (el.target.classList.value !== "square") return
-    allowDrawing = true;
-            // Checks if darken is enabled
-            if (enableDarken === true) darken(el.target)
-
-            // Checks if rainbow is enabled
-            if (enableRainbow === true) el.target.style.backgroundColor = `${RandColor()}`
-            
-            if (enableRed === true) el.target.style.backgroundColor = "red"
-            if (enableBlue === true) el.target.style.backgroundColor = "blue"
-            if (enableCustomColor === true) el.target.style.backgroundColor = `${hexColorCode}`
-    console.log('test');
+    enableDrawing = true;
+            startDrawing(el);
 })
 document.querySelector("body").addEventListener("mouseup", function() {
-    allowDrawing = false;
+    enableDrawing = false;
 })
 document.querySelector("body").addEventListener("mouseleave", function() {
-    allowDrawing = false;
+    enableDrawing = false;
 })
