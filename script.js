@@ -81,7 +81,6 @@ function startDrawing(el) {
 function disableAllButSelected(el) {
  
     const selected = el.innerHTML.toLowerCase();
-    el.classList.toggle("btnEnabled")
     
 
    switch (selected) {
@@ -119,6 +118,7 @@ function disableAllButSelected(el) {
        enableCustomColor = selected === "custom color" ? enableCustomColor : false;
        enableDarken = selected === "darken" ? enableDarken : false;
        enableEraser = selected === "eraser" ? enableEraser : false;
+       el.classList.toggle("btnEnabled")
    }
 
 }
